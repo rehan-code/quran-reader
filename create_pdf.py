@@ -17,8 +17,8 @@ from bidi.algorithm import get_display
 font_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fonts")
 os.makedirs(font_dir, exist_ok=True)
 
-# Path to Al Majeed Quranic Font (if manually installed)
-# al_majeed_path = os.path.join(font_dir, "Al Majeed Quranic Font_shiped.ttf")
+# Path to Al Majeed Quranic Font (if manually installed) 
+# al_majeed_path = os.path.join(font_dir, "Al Majeed Quranic Font_shiped.ttf") # currently default to arial
 
 # Try to use Al Majeed Quranic Font, fall back to Arial if not available
 try:
@@ -41,6 +41,10 @@ except Exception as e:
         arabic_font = 'Arial'
         print("Using Arial font for text...")
 
+
+def is_arabic_numeral(char):
+    """Check if a character is an Arabic numeral (0-9)"""
+    return char.isdigit()
 
 def extract_text_from_docx(docx_path):
     """Extract text from a .docx file"""
@@ -142,7 +146,11 @@ def create_quran_pdf(pages_folder, output_pdf):
         leading=30,   # Increased line spacing
         alignment=TA_CENTER,
         spaceAfter=12,
-        textColor=(0, 0, 0.4)  # Dark blue color for traditional Quran text
+        textColor=(0, 0, 0.4),  # Dark blue color for traditional Quran text
+        allowWidows=0,
+        allowOrphans=0,
+        wordWrap='CJK',
+        allowMarkup=1  # Enable HTML-like markup for inline styling
     )
     
     # Create a style for the page number
@@ -173,8 +181,27 @@ def create_quran_pdf(pages_folder, output_pdf):
         
         # Process each line of text
         for line in text_lines:
+            # Process the line to add decorative elements around ayah numbers
+            processed_line = ""
+            i = 0
+            while i < len(line):
+                if is_arabic_numeral(line[i]):
+                    # Collect the full number
+                    num_start = i
+                    while i < len(line) and is_arabic_numeral(line[i]):
+                        i += 1
+                    number = line[num_start:i]
+                    
+                    # Add decorative element around the number in traditional Quran style
+                    # Using Unicode ornate parentheses specifically designed for Quranic text
+                    processed_line += f" ﴿{number}﴾ "
+                    print(processed_line)
+                else:
+                    processed_line += line[i]
+                    i += 1
+            
             # Reshape Arabic text for proper display
-            reshaped_text = arabic_reshaper.reshape(line)
+            reshaped_text = arabic_reshaper.reshape(processed_line)
             bidi_text = get_display(reshaped_text)
             
             # Add the line to the PDF
