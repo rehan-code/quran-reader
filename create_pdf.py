@@ -17,8 +17,8 @@ from bidi.algorithm import get_display
 font_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fonts")
 os.makedirs(font_dir, exist_ok=True)
 
-# Path to Al Majeed Quranic Font (if manually installed) 
-# al_majeed_path = os.path.join(font_dir, "Al Majeed Quranic Font_shiped.ttf") # currently default to arial
+# Path to Al Majeed Quranic Font (if manually installed)
+# al_majeed_path = os.path.join(font_dir, "Al Majeed Quranic Font_shiped.ttf")
 
 # Try to use Al Majeed Quranic Font, fall back to Arial if not available
 try:
@@ -195,7 +195,6 @@ def create_quran_pdf(pages_folder, output_pdf):
                     # Add decorative element around the number in traditional Quran style
                     # Using Unicode ornate parentheses specifically designed for Quranic text
                     processed_line += f" ﴿{number}﴾ "
-                    print(processed_line)
                 else:
                     processed_line += line[i]
                     i += 1
