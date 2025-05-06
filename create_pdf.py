@@ -200,8 +200,8 @@ def create_quran_pdf(pages_folder, output_pdf):
                     i += 1
             
             # Reshape Arabic text for proper display
-            reshaped_text = arabic_reshaper.reshape(processed_line)
-            bidi_text = get_display(reshaped_text)
+                reshaped_text = arabic_reshaper.reshape(processed_line)
+                bidi_text = get_display(reshaped_text)
             
             # Add the line to the PDF
             elements.append(Paragraph(bidi_text, quran_style))
