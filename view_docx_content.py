@@ -75,7 +75,7 @@ if __name__ == "__main__":
         print(f"Error: File not found at {docx_path}")
         sys.exit(1)
     
-    # Get and print the text content of the file
+    # Get the text content of the file
     text_content = get_docx_content(docx_path)
     print(f"\nText content of {os.path.basename(docx_path)}:\n")
     print("-" * 60)
